@@ -1,0 +1,6 @@
+{
+  "name": "BIAS",
+  "description": "BIAS - Belajar Integritas Asyik dan Seru. Tagline: Hilangkan Bias, Bangun Integritas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

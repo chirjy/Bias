@@ -1,113 +1,13 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>BIAS - Belajar Integritas Asyik dan Seru</title>
-  <meta name="description" content="BIAS - Belajar Integritas Asyik dan Seru. Hilangkan Bias, Bangun Integritas." />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #020617;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #f8fafc;
-    }
-    #loading {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #020617;
-      z-index: 10;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid rgba(16, 185, 129, 0.15);
-      border-top: 4px solid #10b981;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .loading-title {
-      font-weight: 800;
-      font-size: 1.25rem;
-      color: #ffffff;
-      letter-spacing: 0.05em;
-    }
-    .loading-subtitle {
-      font-size: 0.85rem;
-      color: #34d399;
-      margin-top: 4px;
-    }
-    .loading-tagline {
-      font-size: 0.75rem;
-      color: #94a3b8;
-      margin-top: 12px;
-      font-style: italic;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-    .fallback-link {
-      margin-top: 20px;
-      font-size: 0.8rem;
-      color: #818cf8;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Loading Animation -->
-  <div id="loading">
-    <div class="spinner"></div>
-    <div class="loading-title">BIAS</div>
-    <div class="loading-subtitle">Belajar Integritas Asyik dan Seru</div>
-    <div class="loading-tagline">"Hilangkan Bias, Bangun Integritas."</div>
-    <a href="https://ais-pre-2gumncwrmzlttv3zh6f6d7-737128266499.asia-southeast1.run.app" target="_blank" class="fallback-link">
-      Jika aplikasi tidak muncul, klik di sini untuk membuka langsung
-    </a>
-  </div>
-
-  <!-- Fullscreen Iframe -->
-  <iframe 
-    id="app-frame"
-    src="https://ais-pre-2gumncwrmzlttv3zh6f6d7-737128266499.asia-southeast1.run.app" 
-    allow="camera; microphone; clipboard-write; autoplay; fullscreen"
-    onload="hideLoading()"
-  ></iframe>
-
-  <script>
-    function hideLoading() {
-      const loader = document.getElementById('loading');
-      if (loader) {
-        loader.style.opacity = '0';
-        loader.style.visibility = 'hidden';
-      }
-    }
-
-    // Backup timer jika event onload terlambat
-    setTimeout(hideLoading, 5000);
-  </script>
-
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BIAS - Belajar Integritas Asyik dan Seru</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
+
