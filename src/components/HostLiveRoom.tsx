@@ -126,7 +126,7 @@ export const HostLiveRoom: React.FC<HostLiveRoomProps> = ({ session: initialSess
     try {
       const cleanPin = (session?.pin || '').replace(/\D/g, '').trim() || (session?.pin || '').trim();
       if (!cleanPin) return;
-      const res = await fetch(`/api/quiz/session/${cleanPin}`);
+      const res = await fetch(`/api/quiz/session/${cleanPin}?role=host`);
       const data = await res.json();
       if (data.session) setSession(data.session);
       if (data.currentQuestion) setCurrentQuestion(data.currentQuestion);
