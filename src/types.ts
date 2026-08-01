@@ -109,6 +109,28 @@ export interface ParticipantAnswer {
   submittedAt: number;
 }
 
+export interface SelfExamSession {
+  id: string;
+  nip: string;
+  participantName: string;
+  category: string;
+  quizMode: 'exam';
+  score: number; // percentage (0-100)
+  totalQuestions: number;
+  correctCount: number;
+  status: 'LULUS' | 'TIDAK LULUS';
+  completedAt: string;
+  timeSpentSeconds: number;
+  answers?: Array<{
+    questionId: string;
+    prompt: string;
+    isCorrect: boolean;
+    userAnswerText: string;
+    correctAnswerText: string;
+    explanation?: string;
+  }>;
+}
+
 export interface ActivityLog {
   id: string;
   timestamp: string;
@@ -143,4 +165,5 @@ export interface SystemAnalytics {
     accuracy: number;
     totalPlayed: number;
   }>;
+  selfExams?: SelfExamSession[];
 }
