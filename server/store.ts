@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Material, Question, QuizSession, Participant, ParticipantAnswer, ActivityLog, SystemAnalytics } from '../src/types';
+import { Material, Question, QuizSession, Participant, ParticipantAnswer, ActivityLog, SystemAnalytics, SelfExamSession } from '../src/types';
 import { generateFallbackQuestions } from './ai/QuestionGenerator';
 
 const STORE_FILE = path.join(process.cwd(), 'data_store.json');
@@ -12,6 +12,7 @@ class Store {
   private participants: Map<string, Participant[]> = new Map(); // key = PIN
   private participantAnswers: Map<string, ParticipantAnswer[]> = new Map(); // key = PIN
   private activityLogs: ActivityLog[] = [];
+  private selfExams: SelfExamSession[] = [];
 
   constructor() {
     this.loadStoreFromFile();
@@ -33,7 +34,7 @@ class Store {
             const createdMs = new Date(s.createdAt || 0).getTime();
             const lastActive = s.lastHostActiveAt || createdMs;
             const inactiveMinutes = (Date.now() - lastActive) / (1000 * 60);
-            if (s.status !== 'finished' && inactiveMinutes > 3) {
+            if (s.status !== 'finished' && inactiveMinutes > 1440) {
               s.status = 'finished';
             }
             this.quizSessions.set(s.pin, s);
@@ -52,6 +53,9 @@ class Store {
         if (Array.isArray(data.activityLogs)) {
           this.activityLogs = data.activityLogs;
         }
+        if (Array.isArray(data.selfExams)) {
+          this.selfExams = data.selfExams;
+        }
       }
     } catch (err) {
       console.error('Peringatan: Gagal membaca data_store.json:', err);
@@ -67,6 +71,7 @@ class Store {
         participants: Object.fromEntries(this.participants),
         participantAnswers: Object.fromEntries(this.participantAnswers),
         activityLogs: this.activityLogs,
+        selfExams: this.selfExams,
       };
       fs.writeFileSync(STORE_FILE, JSON.stringify(data, null, 2), 'utf-8');
     } catch (err) {
@@ -232,8 +237,8 @@ class Store {
       const lastActive = s.lastHostActiveAt || createdMs;
       const inactiveMinutes = (now - lastActive) / (1000 * 60);
 
-      // Auto-finish if no host activity for more than 3 minutes
-      if (inactiveMinutes > 3) {
+      // Auto-finish if no host activity for more than 24 hours (1440 minutes)
+      if (inactiveMinutes > 1440) {
         s.status = 'finished';
         hasChanges = true;
         continue;
@@ -260,12 +265,12 @@ class Store {
       return undefined;
     }
 
-    // Auto-finish if host has been inactive for more than 3 minutes
+    // Auto-finish if host has been inactive for more than 24 hours (1440 minutes)
     const createdMs = new Date(session.createdAt || 0).getTime();
     const lastActive = session.lastHostActiveAt || createdMs;
     const inactiveMinutes = (Date.now() - lastActive) / (1000 * 60);
 
-    if (inactiveMinutes > 3) {
+    if (inactiveMinutes > 1440) {
       session.status = 'finished';
       this.saveStoreToFile();
       return undefined;
@@ -393,6 +398,20 @@ class Store {
     return list || [];
   }
 
+  public addSelfExam(exam: SelfExamSession) {
+    this.selfExams.unshift(exam);
+    this.addLog(
+      exam.participantName || 'Peserta Mandiri',
+      'Ujian Mandiri Selesai',
+      `Peserta ${exam.participantName} (${exam.nip}) menyelesaikan Ujian Mandiri folder ${exam.category} dengan skor ${exam.score}% (${exam.status})`
+    );
+    this.saveStoreToFile();
+  }
+
+  public getSelfExams(): SelfExamSession[] {
+    return this.selfExams;
+  }
+
   // System Logs & Analytics
   public addLog(user: string, action: string, details: string) {
     const log: ActivityLog = {
@@ -495,6 +514,7 @@ class Store {
         { nickname: 'Ahmad Fauzi (LAN RI)', score: 3410, accuracy: 88, totalPlayed: 3 },
         { nickname: 'Dewi Lestari (Kemenkeu)', score: 3200, accuracy: 85, totalPlayed: 2 },
       ],
+      selfExams: this.selfExams,
     };
   }
 }
