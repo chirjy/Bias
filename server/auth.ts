@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'bias-siasn-bpom-secret-key-2026';
-const SIASN_API_URL = 'https://siasn.pom.go.id/api/v1/auth/login';
+const SIASN_API_URL = 'END_POINT_URL';
 
 // Server-side isolated store for real SIASN tokens
 const siasnTokenStore = new Map<string, { token: string; nip: string; name: string; createdAt: number }>();
